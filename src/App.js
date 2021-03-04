@@ -1,26 +1,29 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
-function App() {
+require('dotenv').config();
+
+
+
+export default function App() {
+  const [weather, getWeather] = useState('');
+
+  const url = `https://api.openweathermap.org/data/2.5/onecall?lat=33.441792&lon=-94.037689&exclude=minutely,hourly&appid=c7e5d3212e53bd975eb6fd75f018e514&units=imperial`
+
+  const getWeatherData = () => {
+    axios.get(`${url}`)
+    .then((response) => {
+      const locationWeather = response.data
+      getWeather(locationWeather)
+    })
+  }
+
+  useEffect(() => {
+    getWeatherData();
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-          HELP ME
-        </a>
-      </header>
-    </div>
+    <WeatherWidget weather={weather}/>
   );
 }
-
-export default App;
